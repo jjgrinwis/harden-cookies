@@ -1,0 +1,26 @@
+{
+  "name": "harden-cookies",
+  "version": "0.0.1",
+  "description": "Harden the set-cookie headers.",
+  "main": "main.js",
+  "config": {
+    "ewid": "37961"
+  },
+  "scripts": {
+    "build": "npm run build-ts",
+    "build-ts": "tsc && npm run build-bundle-json",
+    "build-bundle-json": "cd built && echo '{\"edgeworker-version\":\"'$npm_package_version'\",\"description\":\"Harden the set-cookie headers\"}' > bundle.json && npm run build-ew-tgz",
+    "build-ew-tgz": "cd built && tar czvf 'ew_'$npm_package_config_ewid'_'$npm_package_version'.tgz' *.json *.js",
+    "postinstall": "npm run build"
+  },
+  "keywords": [
+    "akami",
+    "edgeworker",
+    "cookies"
+  ],
+  "author": "John Grinwis and Koen Schagen from Akamai",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/akamai-edgeworkers": "^1.0.8"
+  }
+}
