@@ -2,18 +2,11 @@
 // Harden cookie EW script build by kschagen and jgrinwis of Akamai NL.
 // Just get all the set-cookies from origin (if set) and make sure they are hardened.
 // Secure attribute must also be set when using SameSite=None!
-// Make sure to set:
-//
-// <edgeservices:cookie.pass-set-cookie-policy>
-//    ALWAYS
-// </edgeservices:cookie.pass-set-cookie-policy>
-//
-// via advanced metadata as we’re running it on onOriginResponse()
 */
 
 import { SetCookie } from 'cookies';
 
-export function onOriginResponse(request, response) {
+export function onClientResponse(request, response) {
     let in_setcookies = response.getHeader('Set-Cookie');
 
     // only update the set-cookies if we have received some
