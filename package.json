@@ -1,6 +1,6 @@
 {
   "name": "harden-cookies",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "Harden the set-cookie headers.",
   "main": "main.js",
   "config": {
