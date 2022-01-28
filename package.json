@@ -1,6 +1,6 @@
 {
   "name": "harden-cookies",
-  "version": "0.0.11",
+  "version": "0.1.5",
   "description": "Harden the set-cookie headers.",
   "main": "main.js",
   "config": {
@@ -9,8 +9,10 @@
   "scripts": {
     "build": "npm run build-ts",
     "build-ts": "tsc && npm run build-bundle-json",
-    "build-bundle-json": "cd built && echo '{\"edgeworker-version\":\"'$npm_package_version'\",\"description\":\"Harden the set-cookie headers\"}' > bundle.json && npm run build-ew-tgz",
-    "build-ew-tgz": "cd built && tar czvf 'ew_'$npm_package_config_ewid'_'$npm_package_version'.tgz' *.json *.js",
+    "build-bundle-json": "cd built && echo '{\"edgeworker-version\":\"'$npm_package_version'\",\"description\":\"'${description}'Harden the set-cookie headers.\"}' > bundle.json && npm run build-ew-tgz",
+    "build-ew-tgz": "cd built && tar czvf 'ew_'$npm_package_config_ewid'_'$npm_package_version'.tgz' *.json *.js && npm run upload-edgeworker",
+    "upload-edgeworker": "akamai edgeworkers upload $npm_package_config_ewid --bundle built/ew_${npm_package_config_ewid}_$npm_package_version.tgz && npm run activate-edgeworker",
+    "activate-edgeworker": "akamai edgeworkers activate $npm_package_config_ewid staging $npm_package_version",
     "postinstall": "npm run build"
   },
   "keywords": [
@@ -21,6 +23,7 @@
   "author": "John Grinwis and Koen Schagen from Akamai",
   "license": "ISC",
   "devDependencies": {
-    "@types/akamai-edgeworkers": "^1.0.8"
+    "@types/akamai-edgeworkers": "^1.0.8",
+    "typescript": "^4.5.5"
   }
 }

@@ -6,6 +6,9 @@
 
 import { SetCookie } from 'cookies';
 
+// if needed you can ignore certain cookies
+const ignoreCookie: string[] = ['ignore_me', 'cookie_3']
+
 export function onClientResponse(request, response) {
     let in_setcookies = response.getHeader('Set-Cookie');
 
@@ -20,9 +23,13 @@ export function onClientResponse(request, response) {
         // add our updated cookies to response object and go
         for (var i = 0; i < in_setcookies.length; i++) {
             var cookie = new SetCookie(in_setcookies[i]);
-            cookie.secure = true;
-            cookie.httpOnly = true;
-            cookie.sameSite = 'Strict';
+
+            // only set attributes if not part of ignore cookie list
+            if (ignoreCookie.indexOf(cookie.name) < 1) {
+                cookie.secure = true;
+                cookie.httpOnly = true;
+                cookie.sameSite = 'Strict';
+            }
             response.addHeader('Set-Cookie', cookie.toHeader());
         }
     }
