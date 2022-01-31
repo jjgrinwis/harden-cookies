@@ -15,22 +15,24 @@ export function onClientResponse(request, response) {
     // only update the set-cookies if we have received some
     if (typeof in_setcookies !== 'undefined') {
 
-        // remove the original set-cookie headers from response object
-        for (var j = 0; j < in_setcookies.length; j++) {
-            response.removeHeader('Set-Cookie');
-        }
+        // only modify if not part of ignore cookie list
+        if (ignoreCookie.indexOf(cookie.name) < 1) {
+            
+            // remove the original set-cookie headers from response object
+            for (var j = 0; j < in_setcookies.length; j++) {
+                response.removeHeader('Set-Cookie');
+            }
 
-        // add our updated cookies to response object and go
-        for (var i = 0; i < in_setcookies.length; i++) {
-            var cookie = new SetCookie(in_setcookies[i]);
-
-            // only set attributes if not part of ignore cookie list
-            if (ignoreCookie.indexOf(cookie.name) < 1) {
+            // add our updated cookies to response object and go
+            for (var i = 0; i < in_setcookies.length; i++) {
+                var cookie = new SetCookie(in_setcookies[i]);
+               
                 cookie.secure = true;
                 cookie.httpOnly = true;
                 cookie.sameSite = 'Strict';
+
+                response.addHeader('Set-Cookie', cookie.toHeader());
             }
-            response.addHeader('Set-Cookie', cookie.toHeader());
         }
     }
 }
